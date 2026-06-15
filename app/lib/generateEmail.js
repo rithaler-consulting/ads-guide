@@ -261,13 +261,6 @@ export function generateGuideEmail({ guide, email }) {
           ${keywords}
         </table>
 
-        <!-- Negative Keywords -->
-        <p style="font-family:Montserrat,Arial,sans-serif;font-size:14px;font-weight:700;color:${NAVY};margin:20px 0 8px;">Negative Keywords</p>
-        <p style="font-family:Montserrat,Arial,sans-serif;font-size:13px;color:#4a5568;margin:0 0 10px;">Add these as Exact match negatives to prevent wasted spend:</p>
-        <table width="100%" cellpadding="0" cellspacing="0">
-          ${listItems(guide.negativeKeywords)}
-        </table>
-
         <!-- Final URL -->
         <p style="font-family:Montserrat,Arial,sans-serif;font-size:14px;font-weight:700;color:${NAVY};margin:20px 0 4px;">Final URL</p>
         <p style="font-family:Montserrat,Arial,sans-serif;font-size:13px;color:${GOLD};margin:0 0 4px;">${guide.finalUrl || ''}</p>
@@ -363,6 +356,27 @@ export function generateGuideEmail({ guide, email }) {
             'Budget is set and you understand how to check impression share',
           ])}
         </table>
+      </td></tr>
+
+      <!-- Bonus: Negative Keywords -->
+      <tr><td style="padding:28px 0 0;">
+        <div style="background:#f0f4f8;border-radius:8px;padding:20px 24px;">
+          <p style="font-family:Montserrat,Arial,sans-serif;font-size:12px;font-weight:700;color:${GOLD};text-transform:uppercase;letter-spacing:1px;margin:0 0 6px;">Bonus</p>
+          <p style="font-family:Montserrat,Arial,sans-serif;font-size:16px;font-weight:700;color:${NAVY};margin:0 0 8px;">Negative Keywords</p>
+          <p style="font-family:Montserrat,Arial,sans-serif;font-size:13px;color:#4a5568;line-height:1.6;margin:0 0 14px;">
+            There's no negative keyword field during campaign creation — you add them after. Once your campaign is live, go to <strong>Keywords → Negative Keywords</strong> in the left menu, click the <strong>+</strong> button, select your campaign, and add the list below. This prevents your ads from showing on irrelevant searches and protects your budget from day one.
+          </p>
+          <table width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid ${BORDER};">
+            ${(guide.negativeKeywords || []).map(k => {
+              const fmt = k.matchType === 'Exact' ? `[${k.keyword}]` : `"${k.keyword}"`;
+              const color = k.matchType === 'Exact' ? '#2d7a4f' : '#1a5276';
+              return `<tr><td style="padding:6px 0;border-bottom:1px solid ${BORDER};font-family:Montserrat,Arial,sans-serif;">
+                <span style="display:inline-block;width:60px;font-size:11px;font-weight:700;color:${color};text-transform:uppercase;">${k.matchType}</span>
+                <span style="font-size:14px;color:${NAVY};font-weight:500;">${fmt}</span>
+              </td></tr>`;
+            }).join('')}
+          </table>
+        </div>
       </td></tr>
 
       <!-- Final CTA -->

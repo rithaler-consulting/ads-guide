@@ -71,28 +71,33 @@ Generate a complete Google Ads Search Campaign setup guide for this business. Re
       "keyword": "string"
     }
   ],
-  "negativeKeywords": ["string array of 8-12 relevant negatives"],
   "finalUrl": "string (the most relevant page on their site — homepage or a specific service page if detectable)",
   "displayPaths": ["string path 1 (max 15 chars)", "string path 2 (max 15 chars)"],
   "headlines": [
-    "string (max 30 chars each)"
+    "string"
   ],
   "descriptions": [
-    "string (max 90 chars each)"
+    "string"
   ],
   "sitelinks": [
     {
-      "text": "string (max 25 chars)",
-      "description1": "string (max 35 chars)",
-      "description2": "string (max 35 chars)",
+      "text": "string",
+      "description1": "string",
+      "description2": "string",
       "url": "string (use homepage URL if no specific page detectable, appended with a logical path like /about or /contact)"
     }
   ],
-  "callouts": ["string array of 6-8 short callout extensions, max 25 chars each"],
+  "callouts": ["string array of 6-8 callout extensions"],
   "structuredSnippets": {
     "header": "string (e.g. Services)",
-    "values": ["array of 4-6 values, max 25 chars each"]
+    "values": ["array of 4-6 values"]
   },
+  "negativeKeywords": [
+    {
+      "matchType": "Exact",
+      "keyword": "string"
+    }
+  ],
   "budgetRecommendation": {
     "minimumDaily": "string (e.g. $20/day CAD)",
     "recommended": "string (e.g. $30-40/day CAD to be competitive in ${city})",
@@ -102,20 +107,35 @@ Generate a complete Google Ads Search Campaign setup guide for this business. Re
 
 KEYWORD RULES:
 - Keep the keyword list SHORT — 8 to 14 keywords maximum. The user likely has a small budget (~$20/day) so too many keywords spreads budget thin.
-- Use Exact match [brackets] for the highest-intent, most specific terms
-- Use Phrase match "quotes" for slightly broader terms
+- Use Exact match for the highest-intent, most specific terms
+- Use Phrase match for slightly broader terms
 - Use Broad match sparingly — only 1-2 if clearly valuable
 - Represent the matchType field as: "Exact", "Phrase", or "Broad"
+- Do NOT include brackets or quotes in the keyword string itself — just the plain keyword
 
-HEADLINE RULES:
-- Write exactly 6 headlines (not more — fewer variations = better testing signal on small budgets)
-- Max 30 characters each — count carefully
-- Include: business name, city, key service, key USP, a CTA
+NEGATIVE KEYWORD RULES:
+- Generate 8-12 negative keywords relevant to this business
+- Use Exact match for specific irrelevant terms (e.g. "free", "DIY", "how to")
+- Use Phrase match for broader irrelevant concepts
+- Represent matchType as "Exact" or "Phrase"
+- Do NOT include brackets or quotes in the keyword string itself — just the plain keyword
 
-DESCRIPTION RULES:
-- Write exactly 3 descriptions (not 4 — same testing reason)
-- Max 90 characters each
+STRICT CHARACTER LIMITS — count every character before including:
+- Headlines: EXACTLY 6 headlines, MAX 30 characters each (including spaces). Count carefully. Reject and rewrite any that exceed 30.
+- Descriptions: EXACTLY 3 descriptions, MAX 90 characters each (including spaces). Count carefully. Reject and rewrite any that exceed 90.
+- Display paths: MAX 15 characters each
+- Sitelink text: MAX 25 characters each
+- Sitelink description lines: MAX 35 characters each
+- Callouts: MAX 25 characters each
+- Structured snippet values: MAX 25 characters each
+
+HEADLINE CONTENT RULES:
+- Include across the 6: business name, city, key service, key USP, a CTA
+- Short punchy phrases work best — do not pad to fill the limit
+
+DESCRIPTION CONTENT RULES:
 - Each should stand alone and be compelling on its own
+- Focus on USPs, social proof, and a call to action
 
 SITELINK RULES:
 - Write 4 sitelinks

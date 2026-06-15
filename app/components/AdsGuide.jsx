@@ -333,6 +333,7 @@ export default function AdsGuide() {
                   required
                 />
               </div>
+
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
                 <div>
                   <label style={s.label}>Business Name</label>
@@ -366,9 +367,7 @@ export default function AdsGuide() {
                   onChange={e => setForm(f => ({ ...f, usps: e.target.value }))}
                   required
                 />
-                <p style={{ fontSize: 12, color: '#718096', margin: '4px 0 0' }}>
-                  What makes you better or different from competitors? Be specific — this shapes your keywords and ad copy.
-                </p>
+
               </div>
               <button type="submit" style={s.btn}>
                 Build My Google Ads Setup Guide →
