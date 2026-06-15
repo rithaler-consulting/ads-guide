@@ -17,7 +17,7 @@ export async function POST(req) {
 
     // Send to prospect + BCC Ryan
     const { error } = await resend.emails.send({
-      from: 'Rithaler Consulting <ryan@rithaler-consulting.com>',
+      from: 'Rithaler Consulting <guide@rithaler-consulting.com>',
       to: [email],
       bcc: ['ryan@rithaler-consulting.com'],
       subject,
@@ -28,7 +28,7 @@ export async function POST(req) {
 
     // Notify Ryan separately
     await resend.emails.send({
-      from: 'Ads Guide <ryan@rithaler-consulting.com>',
+      from: 'Ads Guide <guide@rithaler-consulting.com>',
       to: ['ryan@rithaler-consulting.com'],
       subject: `[Ads Guide] New submission — ${guide.businessName} (${guide.city})`,
       html: `<p style="font-family:sans-serif;">

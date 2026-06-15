@@ -266,6 +266,14 @@ export default function AdsGuide() {
       if (genData.error) throw new Error(genData.error);
 
       setGuide(genData.guide);
+
+      // Fire notify immediately — non-blocking
+      fetch('/api/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ guide: genData.guide, url: form.url, usps: form.usps }),
+      }).catch(() => {});
+
       setStep('preview');
     } catch (err) {
       setErrorMsg(err.message || 'Something went wrong. Please try again.');
@@ -377,20 +385,22 @@ export default function AdsGuide() {
   if (step === 'scanning') {
     return (
       <div ref={containerRef} style={{ padding: '40px 16px' }}>
+        <style>{`
+          @keyframes spin { to { transform: rotate(360deg); } }
+          @keyframes fadeDot { 0%,80%,100%{opacity:0} 40%{opacity:1} }
+        `}</style>
         <div style={{ ...s.card, textAlign: 'center' }}>
-          <div style={{ fontSize: 36, marginBottom: 16 }}>⚙️</div>
-          <h2 style={{ fontSize: 20, fontWeight: 700, color: NAVY, margin: '0 0 10px' }}>Building Your Guide</h2>
-          <p style={{ fontSize: 14, color: '#718096', margin: '0 0 20px' }}>{scanStatus}</p>
-          <div style={{ background: GREY, borderRadius: 8, height: 6, overflow: 'hidden', maxWidth: 300, margin: '0 auto' }}>
-            <div style={{
-              height: '100%',
-              background: GOLD,
-              borderRadius: 8,
-              width: '70%',
-              animation: 'pulse 1.5s ease-in-out infinite',
-            }} />
-          </div>
-          <style>{`@keyframes pulse { 0%,100%{opacity:.6} 50%{opacity:1} }`}</style>
+          {/* Spinning ring */}
+          <div style={{
+            width: 56, height: 56,
+            border: `5px solid ${GREY}`,
+            borderTop: `5px solid ${GOLD}`,
+            borderRadius: '50%',
+            animation: 'spin 0.9s linear infinite',
+            margin: '0 auto 20px',
+          }} />
+          <h2 style={{ fontSize: 20, fontWeight: 700, color: NAVY, margin: '0 0 8px' }}>Building Your Guide</h2>
+          <p style={{ fontSize: 14, color: '#718096', margin: 0 }}>{scanStatus}</p>
         </div>
       </div>
     );
@@ -564,58 +574,27 @@ export default function AdsGuide() {
 
         <div style={s.divider} />
 
-        {/* — EMAIL GATE — everything below is blurred — */}
+        {/* — EMAIL GATE — tiny blurred teaser then immediate CTA — */}
         <div style={{ position: 'relative' }}>
 
-          {/* Blurred preview content */}
-          <div style={{ filter: 'blur(4px)', userSelect: 'none', pointerEvents: 'none', opacity: 0.7 }}>
-
-            {/* STEP 8 preview */}
+          {/* Just enough blurred content to show there's more */}
+          <div style={{ filter: 'blur(4px)', userSelect: 'none', pointerEvents: 'none', opacity: 0.7, maxHeight: 120, overflow: 'hidden' }}>
             <StepHeader num={8} title="AI Max" />
-            <p style={{ fontSize: 13, color: '#4a5568' }}>❌ Leave AI Max off for now. {guide.aiMax?.reason?.slice(0, 60)}…</p>
-            <div style={s.divider} />
-
-            {/* STEP 9 preview */}
-            <StepHeader num={9} title="Keyword and Asset Generation" />
-            <Tip>Skip this step — Google's auto-suggestions are typically too broad.</Tip>
-            <div style={s.divider} />
-
-            {/* STEP 10 preview — keywords teaser */}
+            <p style={{ fontSize: 13, color: '#4a5568' }}>❌ Leave AI Max off for now. {guide.aiMax?.reason?.slice(0, 80)}…</p>
             <StepHeader num={10} title="Keywords and Ads" />
-            <p style={{ fontSize: 13, fontWeight: 700, color: NAVY, margin: '8px 0 6px' }}>Keywords ({guide.keywords?.length} custom keywords)</p>
-            {(guide.keywords || []).slice(0, 3).map((kw, i) => <KeywordRow key={i} kw={kw} />)}
-            <p style={{ fontSize: 13, color: '#718096', margin: '6px 0' }}>+ {Math.max(0, (guide.keywords?.length || 0) - 3)} more…</p>
-            <p style={{ fontSize: 13, fontWeight: 700, color: NAVY, margin: '14px 0 6px' }}>Headlines</p>
-            {(guide.headlines || []).slice(0, 2).map((h, i) => (
-              <div key={i} style={{ fontSize: 14, color: NAVY, padding: '5px 0', borderBottom: `1px solid ${BORDER}` }}>H{i+1}: {h}</div>
-            ))}
-            <p style={{ fontSize: 13, color: '#718096', margin: '6px 0' }}>+ {Math.max(0, (guide.headlines?.length || 0) - 2)} more headlines + 3 descriptions…</p>
-            <div style={s.divider} />
-
-            {/* STEP 11 preview */}
-            <StepHeader num={11} title="Budget" />
-            <InfoRow label="Minimum Daily" value={guide.budgetRecommendation?.minimumDaily} />
-            <div style={s.divider} />
-
-            {/* STEP 12 preview */}
-            <StepHeader num={12} title="Review Checklist" />
-            <BulletList items={['Conversion tracking confirmed', 'Display Network unchecked', 'Location options verified']} />
+            <p style={{ fontSize: 13, fontWeight: 700, color: NAVY, margin: '8px 0 6px' }}>Keywords ({guide.keywords?.length} custom keywords generated for your business)</p>
           </div>
 
-          {/* Email gate overlay */}
+          {/* Fade overlay — starts immediately */}
           <div style={{
-            background: 'linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.98) 30%)',
+            background: 'linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 60%)',
             position: 'absolute',
             inset: 0,
             zIndex: 5,
           }} />
 
-          <div style={{
-            position: 'relative',
-            zIndex: 10,
-            textAlign: 'center',
-            paddingTop: 20,
-          }}>
+          {/* Email gate — sits right below the fade */}
+          <div style={{ position: 'relative', zIndex: 10, textAlign: 'center', marginTop: 8 }}>
             <div style={{
               background: '#fff',
               border: `2px solid ${GOLD}`,
@@ -645,7 +624,6 @@ export default function AdsGuide() {
                   Send My Full Guide →
                 </button>
               </form>
-              <p style={{ fontSize: 11, color: '#a0aec0', margin: '10px 0 0' }}>No spam. One email with your guide.</p>
             </div>
           </div>
         </div>
