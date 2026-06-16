@@ -379,13 +379,46 @@ export function generateGuideEmail({ guide, email }) {
         </div>
       </td></tr>
 
-      <!-- Final CTA -->
-      <tr><td style="padding:32px 0 0;">
+      <!-- Final CTA: Done For You -->
+      <tr><td style="padding:32px 0 0;border-top:1px solid ${BORDER};">
         <p style="font-family:Montserrat,Arial,sans-serif;font-size:15px;font-weight:700;color:${NAVY};margin:0 0 8px;">Want this done for you?</p>
         <p style="font-family:Montserrat,Arial,sans-serif;font-size:13px;color:#4a5568;line-height:1.6;margin:0 0 16px;">
           Setting up a campaign correctly is one thing. Managing it — adjusting bids, testing ad variations, cutting wasted spend, and scaling what works — is where most business owners run out of time. We handle all of it.
         </p>
         ${ctaButton('Book a Free Strategy Call →', calendlyLink)}
+      </td></tr>
+
+      <!-- Upsell: Google Ads Optimization Guide -->
+      <tr><td style="padding:28px 0 0;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:${NAVY};border-radius:10px;overflow:hidden;">
+          <tr><td style="padding:28px 28px 24px;">
+
+            <p style="font-family:Montserrat,Arial,sans-serif;font-size:11px;font-weight:700;color:${GOLD};text-transform:uppercase;letter-spacing:1px;margin:0 0 8px;">Prefer to manage it yourself?</p>
+            <h3 style="font-family:Montserrat,Arial,sans-serif;font-size:20px;font-weight:800;color:#fff;margin:0 0 12px;">Google Ads Optimization Guide</h3>
+            <p style="font-family:Montserrat,Arial,sans-serif;font-size:13px;color:rgba(255,255,255,0.8);line-height:1.7;margin:0 0 16px;">
+              Your campaign is built. Now make sure it stays profitable. This step-by-step PDF walks you through exactly how to read your campaign data, what to adjust and when, how to cut wasted spend before it adds up, and how to recognize what's working so you can double down on it — without needing to hire an agency.
+            </p>
+
+            <!-- Pricing -->
+            <table cellpadding="0" cellspacing="0" style="margin:0 0 6px;">
+              <tr>
+                <td style="font-family:Montserrat,Arial,sans-serif;font-size:13px;color:rgba(255,255,255,0.45);text-decoration:line-through;padding-right:10px;">$199.00 CAD</td>
+                <td style="font-family:Montserrat,Arial,sans-serif;font-size:22px;font-weight:800;color:${GOLD};">$49.99 CAD</td>
+              </tr>
+            </table>
+            <p style="font-family:Montserrat,Arial,sans-serif;font-size:12px;color:rgba(255,255,255,0.5);margin:0 0 20px;">
+              Sale ends June 30 · Use code <strong style="color:${GOLD};">JUNE49</strong> at checkout
+            </p>
+
+            <!-- Button -->
+            <table cellpadding="0" cellspacing="0">
+              <tr><td style="background:${GOLD};border-radius:6px;padding:13px 24px;">
+                <a href="https://buy.stripe.com/6oU7sL9cy1FX7zX5WxfjG01" style="color:#fff;font-family:Montserrat,Arial,sans-serif;font-size:14px;font-weight:700;text-decoration:none;">Get the Optimization Guide →</a>
+              </td></tr>
+            </table>
+
+          </td></tr>
+        </table>
       </td></tr>
 
     </table>
