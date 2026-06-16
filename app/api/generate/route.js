@@ -154,6 +154,25 @@ Be specific, practical, and tailored to this exact business. Do not use placehol
     const cleaned = raw.replace(/^```json\s*/i, '').replace(/\s*```$/i, '').trim();
     const guide = JSON.parse(cleaned);
 
+    // ── Hard enforce character limits — Claude's instructions aren't always followed ──
+    const trim = (str, max) => typeof str === 'string' ? str.slice(0, max) : str;
+
+    guide.headlines = (guide.headlines || []).map(h => trim(h, 30));
+    guide.descriptions = (guide.descriptions || []).map(d => trim(d, 90));
+    guide.displayPaths = (guide.displayPaths || []).map(p => trim(p, 15));
+    guide.callouts = (guide.callouts || []).map(c => trim(c, 25));
+    if (guide.structuredSnippets?.values) {
+      guide.structuredSnippets.values = guide.structuredSnippets.values.map(v => trim(v, 25));
+    }
+    if (guide.sitelinks) {
+      guide.sitelinks = guide.sitelinks.map(s => ({
+        ...s,
+        text: trim(s.text, 25),
+        description1: trim(s.description1, 35),
+        description2: trim(s.description2, 35),
+      }));
+    }
+
     return NextResponse.json({ guide });
   } catch (err) {
     console.error('Generate error:', err);
