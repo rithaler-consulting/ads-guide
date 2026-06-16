@@ -307,19 +307,6 @@ export default function AdsGuide() {
     return (
       <div ref={containerRef} style={{ padding: '24px 16px 40px' }}>
         <div style={s.card}>
-          {/* Header */}
-          <div style={{ textAlign: 'center', marginBottom: 28 }}>
-            <p style={{ fontSize: 12, fontWeight: 700, color: GOLD, textTransform: 'uppercase', letterSpacing: 1, margin: '0 0 8px' }}>
-              Free Tool · Rithaler Consulting
-            </p>
-            <h1 style={{ fontSize: 26, fontWeight: 800, color: NAVY, margin: '0 0 10px' }}>
-              Custom Google Ads Setup Guide
-            </h1>
-            <p style={{ fontSize: 14, color: '#4a5568', lineHeight: 1.7, maxWidth: 520, margin: '0 auto' }}>
-              Enter your website and a few details about your business. We'll scan your site and build a step-by-step Google Search Ad campaign setup guide — customized for your audience and location.
-            </p>
-          </div>
-
           <form onSubmit={handleSubmitForm}>
             <div style={{ display: 'grid', gap: 16 }}>
               <div>
