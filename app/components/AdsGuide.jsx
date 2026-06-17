@@ -321,7 +321,7 @@ export default function AdsGuide() {
                 />
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 14 }}>
                 <div>
                   <label style={s.label}>Business Name</label>
                   <input
