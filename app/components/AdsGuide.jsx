@@ -230,7 +230,7 @@ export default function AdsGuide() {
     return () => ro.disconnect();
   }, [step, guide]);
 
-  const handleSubmitForm = async (e) => {
+ const handleSubmitForm = async (e) => {
   e.preventDefault();
   if (!form.url || !form.businessName || !form.city || !form.usps) return;
   setStep('scanning');
@@ -262,12 +262,14 @@ export default function AdsGuide() {
     const genData = await genRes.json();
     if (genData.error) throw new Error(genData.error);
     setGuide(genData.guide);
-
-    // Meta pixel Lead event — fires only on successful guide generation
+    // Debug logging
+    console.log('Guide generated successfully - firing Lead event');
     if (typeof window !== 'undefined' && window.fbq) {
+      console.log('fbq found, firing Lead event now');
       window.fbq('track', 'Lead');
+    } else {
+      console.log('fbq not found on window - pixel may not be loaded in this app');
     }
-
     // Fire notify immediately — non-blocking
     fetch('/api/notify', {
       method: 'POST',
@@ -276,6 +278,7 @@ export default function AdsGuide() {
     }).catch(() => {});
     setStep('preview');
   } catch (err) {
+    console.log('Error in handleSubmitForm:', err.message);
     setErrorMsg(err.message || 'Something went wrong. Please try again.');
     setStep('error');
   }
