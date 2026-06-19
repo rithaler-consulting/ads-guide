@@ -231,55 +231,55 @@ export default function AdsGuide() {
   }, [step, guide]);
 
   const handleSubmitForm = async (e) => {
-    e.preventDefault();
-    if (!form.url || !form.businessName || !form.city || !form.usps) return;
-    setStep('scanning');
-    setErrorMsg('');
+  e.preventDefault();
+  if (!form.url || !form.businessName || !form.city || !form.usps) return;
+  setStep('scanning');
+  setErrorMsg('');
+  try {
+    // Step 1: Scan URL
+    setScanStatus('Scanning your website…');
+    const scanRes = await fetch('/api/scan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url: form.url }),
+    });
+    const scanData = await scanRes.json();
+    // Step 2: Generate guide
+    setScanStatus('Building your custom setup guide…');
+    const genRes = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        url: form.url,
+        businessName: form.businessName,
+        city: form.city,
+        usps: form.usps,
+        siteTitle: scanData.title || '',
+        siteDescription: scanData.description || '',
+        siteBodyText: scanData.bodyText || '',
+      }),
+    });
+    const genData = await genRes.json();
+    if (genData.error) throw new Error(genData.error);
+    setGuide(genData.guide);
 
-    try {
-      // Step 1: Scan URL
-      setScanStatus('Scanning your website…');
-      const scanRes = await fetch('/api/scan', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: form.url }),
-      });
-      const scanData = await scanRes.json();
-
-      // Step 2: Generate guide
-      setScanStatus('Building your custom setup guide…');
-      const genRes = await fetch('/api/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          url: form.url,
-          businessName: form.businessName,
-          city: form.city,
-          usps: form.usps,
-          siteTitle: scanData.title || '',
-          siteDescription: scanData.description || '',
-          siteBodyText: scanData.bodyText || '',
-        }),
-      });
-      const genData = await genRes.json();
-
-      if (genData.error) throw new Error(genData.error);
-
-      setGuide(genData.guide);
-
-      // Fire notify immediately — non-blocking
-      fetch('/api/notify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ guide: genData.guide, url: form.url, usps: form.usps }),
-      }).catch(() => {});
-
-      setStep('preview');
-    } catch (err) {
-      setErrorMsg(err.message || 'Something went wrong. Please try again.');
-      setStep('error');
+    // Meta pixel Lead event — fires only on successful guide generation
+    if (typeof window !== 'undefined' && window.fbq) {
+      window.fbq('track', 'Lead');
     }
-  };
+
+    // Fire notify immediately — non-blocking
+    fetch('/api/notify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ guide: genData.guide, url: form.url, usps: form.usps }),
+    }).catch(() => {});
+    setStep('preview');
+  } catch (err) {
+    setErrorMsg(err.message || 'Something went wrong. Please try again.');
+    setStep('error');
+  }
+};
 
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
